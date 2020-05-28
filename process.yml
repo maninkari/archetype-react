@@ -1,9 +1,13 @@
+# Orb 'circleci/aws-cli@0.1.13' resolved to 'circleci/aws-cli@0.1.13'
+# Orb 'cypress-io/cypress@1.8.0' resolved to 'cypress-io/cypress@1.8.0'
 version: 2
 jobs:
   build:
+    working_directory: ~/repo
     docker:
     - image: alpine:3.7
     steps:
+    - checkout
     - run:
         name: The First Step
         command: |
@@ -17,11 +21,18 @@ workflows:
 
 # Original config.yml file:
 # version: 2.1
+# 
+# orbs:
+#   aws-cli: circleci/aws-cli@0.1.13
+#   cypress: cypress-io/cypress@1.8.0
+# 
 # jobs:
 #   build:
+#     working_directory: ~/repo
 #     docker:
 #       - image: alpine:3.7
 #     steps:
+#       - checkout
 #       - run:
 #           name: The First Step
 #           command: |
