@@ -35,3 +35,20 @@ jobs:
           command: |
             echo 'Hello World!'
             echo 'This is the delivery pipeline'
+      - run:
+          name: Install and configure dependencies
+          command: |
+            yarn add gh-pages -D
+            git config user.email "ts.roberto@gmail.com"
+            git config user.name "maninkari"
+      - add_ssh_keys:
+          fingerprints:
+            - '34:39:64:df:51:6d:38:ec:57:77:d0:61:4b:6b:ff:34'
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: test-results.xml
