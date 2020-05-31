@@ -1,0 +1,288 @@
+{
+  "id": "string",
+  "href": "string",
+  "description": "string",
+  "effectiveQualificationDate": "2019-07-18T15:27:55.333Z",
+  "estimatedResponseDate": "2019-07-18T15:27:55.334Z",
+  "expectedQualificationDate": "2019-07-18T15:27:55.334Z",
+  "expirationDate": "2019-07-18T15:27:55.334Z",
+  "externalId": "string",
+  "provideAlternative": true,
+  "provideOnlyAvailable": false,
+  "provideUnavailabilityReason": true,
+  "qualificationResult": "string",
+  "serviceQualificationDate": "2019-07-18T15:27:55.334Z",
+  "state": "string",
+  "relatedParty": [
+    {
+      "id": "string",
+      "href": "string",
+      "name": "string",
+      "role": "string",
+      "@baseType": "string",
+      "@schemaLocation": "string",
+      "@type": "string",
+      "@referredType": "string"
+    }
+  ],
+  "serviceQualificationItem": [
+    {
+      "id": "Product1",
+      "expectedActivationDate": "2019-07-18T15:27:55.334Z",
+      "expectedServiceAvailabilityDate": "2019-07-18T15:27:55.334Z",
+      "expirationDate": "2019-07-18T15:27:55.334Z",
+      "qualificationResult": "string",
+      "state": "string",
+      "alternateServiceProposal": [
+        {
+          "id": "string",
+          "alternateServiceAvailabilityDate": "2019-07-18T15:27:55.334Z",
+          "alternateService": {
+            "id": "string",
+            "href": "string",
+            "category": "string",
+            "name": "string",
+            "serviceType": "string",
+            "place": [
+              {
+                "id": "string",
+                "href": "string",
+                "name": "string",
+                "role": "string",
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string"
+              }
+            ],
+            "relatedParty": [
+              {
+                "id": "string",
+                "href": "string",
+                "name": "string",
+                "role": "string",
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string",
+                "@referredType": "string"
+              }
+            ],
+            "serviceCharacteristic": [
+              {
+                "name": "string",
+                "valueType": "string",
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string"
+              }
+            ],
+            "serviceRelationship": [
+              {
+                "relationshipType": "string",
+                "service": {
+                  "id": "string",
+                  "href": "string",
+                  "@baseType": "string",
+                  "@schemaLocation": "string",
+                  "@type": "string",
+                  "@referredType": "string"
+                },
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string"
+              }
+            ],
+            "serviceSpecification": {
+              "id": "string",
+              "href": "string",
+              "name": "string",
+              "version": "string",
+              "targetServiceSchema": {
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string"
+              },
+              "@baseType": "string",
+              "@schemaLocation": "string",
+              "@type": "string",
+              "@referredType": "string"
+            },
+            "state": "feasibilityChecked",
+            "supportingResource": [
+              {
+                "id": "string",
+                "href": "string",
+                "name": "string",
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string",
+                "@referredType": "string"
+              }
+            ],
+            "supportingService": [
+              {
+                "id": "string",
+                "href": "string",
+                "@baseType": "string",
+                "@schemaLocation": "string",
+                "@type": "string",
+                "@referredType": "string"
+              }
+            ],
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string"
+          },
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string"
+        }
+      ],
+      "category": {
+        "id": "string",
+        "href": "string",
+        "name": "string",
+        "@baseType": "string",
+        "@schemaLocation": "string",
+        "@type": "string",
+        "@referredType": "string"
+      },
+      "eligibilityUnavailabilityReason": [
+        {
+          "code": "string",
+          "label": "Reason you can't have the fibre",
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string"
+        }
+      ],
+      "qualificationItemRelationship": [
+        {
+          "id": "string",
+          "relationshipType": "string",
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string"
+        }
+      ],
+      "qualificationRelationship": [
+        {
+          "id": "string",
+          "relationshipType": "string",
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string"
+        }
+      ],
+      "service": {
+        "id": "string",
+        "href": "string",
+        "category": "string",
+        "name": "string",
+        "serviceType": "string",
+        "place": [
+          {
+            "id": "string",
+            "href": "string",
+            "name": "string",
+            "role": "string",
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string"
+          }
+        ],
+        "relatedParty": [
+          {
+            "id": "string",
+            "href": "string",
+            "name": "string",
+            "role": "string",
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string",
+            "@referredType": "string"
+          }
+        ],
+        "serviceCharacteristic": [
+          {
+            "name": "string",
+            "valueType": "string",
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string"
+          }
+        ],
+        "serviceRelationship": [
+          {
+            "relationshipType": "string",
+            "service": {
+              "id": "string",
+              "href": "string",
+              "@baseType": "string",
+              "@schemaLocation": "string",
+              "@type": "string",
+              "@referredType": "string"
+            },
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string"
+          }
+        ],
+        "serviceSpecification": {
+          "id": "string",
+          "href": "string",
+          "name": "string",
+          "version": "string",
+          "targetServiceSchema": {
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string"
+          },
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string",
+          "@referredType": "string"
+        },
+        "state": "feasibilityChecked",
+        "supportingResource": [
+          {
+            "id": "string",
+            "href": "string",
+            "name": "string",
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string",
+            "@referredType": "string"
+          }
+        ],
+        "supportingService": [
+          {
+            "id": "string",
+            "href": "string",
+            "@baseType": "string",
+            "@schemaLocation": "string",
+            "@type": "string",
+            "@referredType": "string"
+          }
+        ],
+        "@baseType": "string",
+        "@schemaLocation": "string",
+        "@type": "string"
+      },
+      "terminationError": [
+        {
+          "id": "string",
+          "value": "string",
+          "@baseType": "string",
+          "@schemaLocation": "string",
+          "@type": "string"
+        }
+      ],
+      "@baseType": "string",
+      "@schemaLocation": "string",
+      "@type": "string"
+    }
+  ],
+  "@baseType": "string",
+  "@schemaLocation": "string",
+  "@type": "string"
+}

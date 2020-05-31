@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
-import styles from './Menu.module.css'
 import { Link } from 'react-navi'
+import styles from './Menu.module.css'
 
 function Menu() {
   return (
