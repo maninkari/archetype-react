@@ -8,7 +8,7 @@ jobs:
   cache-dependencies:
     docker:
       - image: circleci/node:10.16.3
-    working_directory: ~/build
+    working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
@@ -26,8 +26,13 @@ jobs:
   build:
     docker:
       - image: circleci/node:10.16.3
-    working_directory: ~/build
+    working_directory: ~/repo
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
       - run:
           name: Unit tests
           command: yarn test
@@ -36,7 +41,7 @@ jobs:
           command: yarn build
 
       - persist_to_workspace:
-          root: ~/build
+          root: ~/repo
           paths:
             - build
       # - run:
@@ -58,10 +63,15 @@ jobs:
           path: test-results.xml
 
   e2e_test:
-    working_directory: ~/build
+    working_directory: ~/repo
     docker:
       - image: circleci/node:10.16.3
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
       - run:
           name: e2e tests
           command: yarn test:e2e
@@ -74,7 +84,7 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:10.16.3
-    working_directory: ~/build
+    working_directory: ~/repo
     steps:
       - run:
           name: Deploy
