@@ -6,9 +6,9 @@ orbs:
 
 jobs:
   cache-dependencies:
-    working_directory: ~/repo
     docker:
       - image: circleci/node:10.16.3
+    working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
@@ -22,10 +22,11 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
+
   build:
-    working_directory: ~/repo
     docker:
       - image: circleci/node:10.16.3
+    working_directory: ~/repo
     steps:
       - run:
           name: Unit tests
@@ -55,19 +56,21 @@ jobs:
           prefix: tests
       - store_test_results:
           path: test-results.xml
+
   e2e_test:
     working_directory: ~/repo
     docker:
       - image: circleci/node:10.16.3
     steps:
       - run:
-        name: e2e tests
-        command: yarn test:e2e
+          name: e2e tests
+          command: yarn test:e2e
       - store_artifacts:
           path: e2e-test-results.xml
           prefix: tests
       - store_test_results:
           path: e2e-test-results.xml
+
   deploy:
     docker:
       - image: circleci/node:10.16.3
@@ -84,21 +87,21 @@ workflows:
     jobs:
       - cache-dependencies
       - build:
-        requires:
-          - cache-dependencies
-        filters:
-          branches:
-            ignore: master
+          requires:
+            - cache-dependencies
+          filters:
+            branches:
+              ignore: master
       - e2e_test:
-        requires:
-          - cache-dependencies
-        filters:
-          branches:
-            ignore: master
+          requires:
+            - cache-dependencies
+          filters:
+            branches:
+              ignore: master
       - deploy:
           requires:
             - cache-dependencies
           filters:
             branches:
               only: master
-          context: AWS
+          # context: AWS
