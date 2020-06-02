@@ -21,6 +21,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            - ~/.cache
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
   build:
@@ -105,6 +106,7 @@ workflows:
       - e2e_test:
           requires:
             - cache-dependencies
+            - build
           filters:
             branches:
               ignore: master
