@@ -5,7 +5,7 @@ orbs:
   # cypress: cypress-io/cypress@1.8.0
 
 jobs:
-  build:
+  cache-dependencies:
     docker:
       - image: circleci/node:10.16.3
     working_directory: ~/repo
@@ -22,6 +22,14 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
+  build:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Unit tests
+          command: yarn test
       - run:
           name: Build app
           command: yarn build
@@ -30,25 +38,67 @@ jobs:
           root: ~/repo
           paths:
             - build
-      - run:
-          name: The First Step
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-      - run:
-          name: Install and configure dependencies
-          command: |
-            yarn add gh-pages -D
-            git config user.email "ts.roberto@gmail.com"
-            git config user.name "maninkari"
-      - add_ssh_keys:
-          fingerprints:
-            - '34:39:64:df:51:6d:38:ec:57:77:d0:61:4b:6b:ff:34'
-      - run:
-          name: Deploy docs to gh-pages branch
-          command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
+      # - run:
+      #     name: Install and configure dependencies
+      #     command: |
+      #       yarn add gh-pages -D
+      #       git config user.email "ts.roberto@gmail.com"
+      #       git config user.name "maninkari"
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - '34:39:64:df:51:6d:38:ec:57:77:d0:61:4b:6b:ff:34'
+      # - run:
+      #     name: Deploy docs to gh-pages branch
+      #     command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
       - store_artifacts:
           path: test-results.xml
           prefix: tests
       - store_test_results:
           path: test-results.xml
+  e2e_test:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/repo
+    steps:
+      - run:
+        name: e2e tests
+        command: yarn test:e2e
+      - store_artifacts:
+          path: e2e-test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: e2e-test-results.xml
+  deploy:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Deploy
+          command: |
+            echo 'deploying stuff!'
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - cache-dependencies
+      - build:
+        requires:
+          - cache-dependencies
+          filters:
+            branches:
+              ignore: master
+      - e2e_test:
+        requires:
+          - cache-dependencies
+          filters:
+            branches:
+              ignore: master        
+      - deploy:
+          requires:
+            - cache-dependencies
+          filters:
+            branches:
+              only: master
+          context: AWS
