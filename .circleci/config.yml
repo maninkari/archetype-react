@@ -102,6 +102,7 @@ workflows:
             branches:
               ignore: master
       - cypress/run:
+          yarn: true
           name: e2e test
           start: 'yarn start'
           wait-on: 'http://localhost:3000'
