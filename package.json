@@ -24,11 +24,11 @@
     "deploy": "yarn build && aws s3 sync build/ s3://emulator.cloudphoton.com --acl public-read",
     "format": "prettier --write \"src/**/*.{js,jsx,css,json}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,css,json}\"",
-    "lint": "npx eslint \"**/*.{js,jsx}\"",
+    "lint": "eslint \"**/*.{js,jsx}\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run --reporter junit --reporter-options 'mochaFile=cypress/results/junit.xml'",
     "test:e2e:dev": "yarn build && npm-run-all --parallel start cy:open",
-    "test:e2e": "yarn build && npm-run-all --parallel --race start cy:run",
+    "test:e2e": "npm-run-all --parallel --race start cy:run",
     "mock": "node server.js && wait-on http://localhost:8080"
   },
   "eslintConfig": {
