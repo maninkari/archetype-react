@@ -22,10 +22,6 @@ jobs:
           paths:
             - ./node_modules
             - /home/circleci/.cache/Cypress
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - .cache/Cypress
 
   build:
     docker:
