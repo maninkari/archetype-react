@@ -20,8 +20,8 @@ jobs:
       - save_cache:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
-            - ~/.cache
+            - ./node_modules
+            - /home/circleci/.cache/Cypress
       - persist_to_workspace:
           root: ~/
           paths:
@@ -65,25 +65,37 @@ jobs:
           prefix: tests
       - store_test_results:
           path: test-results.xml
-
-  e2e_test:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/node:10.16.3
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "yarn.lock" }}
-            - v1-dependencies-
-      - run:
-          name: e2e tests
-          command: yarn test:e2e
-      - store_artifacts:
-          path: e2e-test-results.xml
-          prefix: tests
+  cypres/run:
+    name: ui-test
+    executor: cypress/base-8
+    start: 'yarn build && yarn mock'
+    wait-on: 'http://localhost:8080'
+    command: npx cypress run --reporter junit --reporter-options 'mochaFile=cypress/results/junit.xml'
+    store_artifacts: true
+    post-steps:
       - store_test_results:
-          path: e2e-test-results.xml
+          path: cypress/results
+    filters:
+      branches:
+        ignore: master
+  # e2e_test:
+  #   working_directory: ~/repo
+  #   docker:
+  #     - image: circleci/node:10.16.3
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - v1-dependencies-{{ checksum "yarn.lock" }}
+  #           - v1-dependencies-
+  #     - run:
+  #         name: e2e tests
+  #         command: yarn test:e2e
+  #     - store_artifacts:
+  #         path: e2e-test-results.xml
+  #         prefix: tests
+  #     - store_test_results:
+  #         path: e2e-test-results.xml
 
   deploy:
     docker:
