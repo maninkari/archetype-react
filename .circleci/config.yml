@@ -95,17 +95,17 @@ workflows:
   build-test-and-deploy:
     jobs:
       - cache-dependencies
-      - build:
-          requires:
-            - cache-dependencies
-          filters:
-            branches:
-              ignore: master
+      # - build:
+      #     requires:
+      #       - cache-dependencies
+      #     filters:
+      #       branches:
+      #         ignore: master
       - cypress/run:
           yarn: true
           name: e2e test
-          start: 'yarn start'
-          wait-on: 'http://localhost:3000'
+          start: 'yarn build && yarn mock'
+          wait-on: 'http://localhost:8080'
           command: yarn cypress run --reporter junit --reporter-options 'mochaFile=cypress/results/junit.xml'
           store_artifacts: true
           post-steps:
