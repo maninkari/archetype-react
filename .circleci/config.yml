@@ -105,7 +105,7 @@ workflows:
           yarn: true
           name: e2e test
           start: 'yarn start'
-          wait-on: 'http://localhost:300'
+          wait-on: 'http://localhost:3000'
           command: yarn cypress run --reporter junit --reporter-options 'mochaFile=cypress/results/junit.xml'
           store_artifacts: true
           post-steps:
