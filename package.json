@@ -27,8 +27,8 @@
     "lint": "eslint \"**/*.{js,jsx}\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run --reporter junit --reporter-options 'mochaFile=cypress/results/junit.xml'",
-    "test:e2e:dev": "yarn build && npm-run-all --parallel start cy:open",
-    "test:e2e": "yarn build && npm-run-all --parallel --race start cy:run",
+    "test:e2e:dev": "yarn build && npm-run-all --parallel mock cy:open",
+    "test:e2e": "yarn build && npm-run-all --parallel --race mock cy:run",
     "mock": "node server.js && wait-on http://localhost:8080"
   },
   "eslintConfig": {
