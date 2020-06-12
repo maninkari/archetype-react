@@ -39,7 +39,7 @@ EOF
 
 terraform {
   backend "s3" {
-    bucket = "slalom-uk-ppp-terraform"
+    bucket = "bckend-terraform"
     key = "terraform/status"
     region = "eu-west-2"
   }

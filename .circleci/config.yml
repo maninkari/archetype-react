@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   cypress: cypress-io/cypress@1.24.0
+  aws-s3: circleci/aws-s3@1.0.15
 
 jobs:
   cache-dependencies:
@@ -38,11 +39,25 @@ jobs:
       - run:
           name: Build app
           command: yarn build
-
       - persist_to_workspace:
           root: ~/repo
           paths:
             - build
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: test-results.xml
+
+  deploy_gh:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Deploy
+          command: |
+            echo 'deploying stuff!'
       # - run:
       #     name: Install and configure dependencies
       #     command: |
@@ -55,52 +70,25 @@ jobs:
       # - run:
       #     name: Deploy docs to gh-pages branch
       #     command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_test_results:
-          path: test-results.xml
 
-  # e2e_test:
-  #   working_directory: ~/repo
-  #   docker:
-  #     - image: circleci/node:10.16.3
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - v1-dependencies-{{ checksum "yarn.lock" }}
-  #           - v1-dependencies-
-  #     - run:
-  #         name: e2e tests
-  #         command: yarn test:e2e
-  #     - store_artifacts:
-  #         path: e2e-test-results.xml
-  #         prefix: tests
-  #     - store_test_results:
-  #         path: e2e-test-results.xml
-
-  deploy:
+  deploy_dev:
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/python:jessie
     working_directory: ~/repo
     steps:
-      - run:
-          name: Deploy
-          command: |
-            echo 'deploying stuff!'
+      - attach_workspace:
+          at: ~/repo
+      - aws-s3/sync:
+          from: build
+          to: 's3://${S3_BUCKET_DEPLOY_DEV}/'
+          arguments: --acl public-read --cache-control "max-age=86400"
+          overwrite: true
 
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
       - cache-dependencies
-      # - build:
-      #     requires:
-      #       - cache-dependencies
-      #     filters:
-      #       branches:
-      #         ignore: master
       - cypress/run:
           yarn: true
           name: e2e test
@@ -114,10 +102,10 @@ workflows:
           filters:
             branches:
               ignore: master
-      - deploy:
+      - deploy_dev:
           requires:
             - cache-dependencies
           filters:
             branches:
-              only: master
+              ignore: master
           # context: AWS
