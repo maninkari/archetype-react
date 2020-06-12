@@ -107,5 +107,5 @@ workflows:
             - cache-dependencies
           filters:
             branches:
-              ignore: master
+              only: master
           # context: AWS
