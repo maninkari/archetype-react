@@ -1,3 +1,4 @@
+# circleci config validate
 version: 2.1
 
 orbs:
@@ -49,28 +50,6 @@ jobs:
       - store_test_results:
           path: test-results.xml
 
-  deploy_gh:
-    docker:
-      - image: circleci/node:10.16.3
-    working_directory: ~/repo
-    steps:
-      - run:
-          name: Deploy
-          command: |
-            echo 'deploying stuff!'
-      # - run:
-      #     name: Install and configure dependencies
-      #     command: |
-      #       yarn add gh-pages -D
-      #       git config user.email "ts.roberto@gmail.com"
-      #       git config user.name "maninkari"
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - '34:39:64:df:51:6d:38:ec:57:77:d0:61:4b:6b:ff:34'
-      # - run:
-      #     name: Deploy docs to gh-pages branch
-      #     command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
-
   deploy_dev:
     docker:
       - image: circleci/python:jessie
@@ -80,7 +59,8 @@ jobs:
           at: ~/repo
       - aws-s3/sync:
           from: build
-          to: 's3://${S3_BUCKET_DEPLOY_DEV}/'
+          to: 's3://archetype-react-dev'
+          # bucket properties need to be edited or --acl public-read won't work
           arguments: --acl public-read --cache-control "max-age=86400"
           overwrite: true
 
@@ -89,6 +69,7 @@ workflows:
   build-test-and-deploy:
     jobs:
       - cache-dependencies
+      - build
       - cypress/run:
           yarn: true
           name: e2e test
@@ -105,7 +86,8 @@ workflows:
       - deploy_dev:
           requires:
             - cache-dependencies
+            - build
+            - e2e test
           filters:
             branches:
-              only: master
-          # context: AWS
+              ignore: master
