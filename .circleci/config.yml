@@ -1,7 +1,9 @@
+# circleci config validate
 version: 2.1
 
 orbs:
   cypress: cypress-io/cypress@1.24.0
+  aws-s3: circleci/aws-s3@1.0.15
 
 jobs:
   cache-dependencies:
@@ -38,69 +40,41 @@ jobs:
       - run:
           name: Build app
           command: yarn build
-
       - persist_to_workspace:
           root: ~/repo
           paths:
             - build
-      # - run:
-      #     name: Install and configure dependencies
-      #     command: |
-      #       yarn add gh-pages -D
-      #       git config user.email "ts.roberto@gmail.com"
-      #       git config user.name "maninkari"
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - '34:39:64:df:51:6d:38:ec:57:77:d0:61:4b:6b:ff:34'
-      # - run:
-      #     name: Deploy docs to gh-pages branch
-      #     command: './node_modules/.bin/gh-pages --dotfiles --message "[skip ci] Updates" -d build'
       - store_artifacts:
           path: test-results.xml
           prefix: tests
       - store_test_results:
           path: test-results.xml
 
-  # e2e_test:
-  #   working_directory: ~/repo
-  #   docker:
-  #     - image: circleci/node:10.16.3
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - v1-dependencies-{{ checksum "yarn.lock" }}
-  #           - v1-dependencies-
-  #     - run:
-  #         name: e2e tests
-  #         command: yarn test:e2e
-  #     - store_artifacts:
-  #         path: e2e-test-results.xml
-  #         prefix: tests
-  #     - store_test_results:
-  #         path: e2e-test-results.xml
-
-  deploy:
+  deploy_dev:
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/python:jessie
     working_directory: ~/repo
     steps:
+      - attach_workspace:
+          at: ~/repo
       - run:
-          name: Deploy
+          name: console.log
           command: |
-            echo 'deploying stuff!'
+            echo 'deploying with env variables!'
+            ls
+      - aws-s3/sync:
+          from: build
+          to: 's3://archetype-react-dev'
+          # bucket properties need to be edited or --acl public-read won't work
+          arguments: --acl public-read --cache-control "max-age=86400"
+          overwrite: true
 
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
       - cache-dependencies
-      # - build:
-      #     requires:
-      #       - cache-dependencies
-      #     filters:
-      #       branches:
-      #         ignore: master
+      - build
       - cypress/run:
           yarn: true
           name: e2e test
@@ -114,10 +88,11 @@ workflows:
           filters:
             branches:
               ignore: master
-      - deploy:
+      - deploy_dev:
           requires:
             - cache-dependencies
+            - build
+            - e2e test
           filters:
             branches:
-              only: master
-          # context: AWS
+              ignore: master
